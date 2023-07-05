@@ -1,0 +1,43 @@
+    <html>
+      <body style="background-color:powderblue">
+	  <div>
+		<table>
+		  <tr bgcolor="#000080" height="40">
+			<td style="color:white;text-align:center;font-size:28px" colspan="3">CI/CD FAILED!!! Project Reports.&nbsp;</td>
+		  </tr>
+		    <tr bgcolor="powderblue">		  
+			<td><br><br></td>
+		    </tr>		  
+		  <tr bgcolor={_color}>
+			<td style="color:white;text-align:center;" colspan="3">{status_title}</td>
+		  </tr>		  
+		  <tr bgcolor="#728FCE">
+			<td style={a1}>Clean_Pre_Archive</td>
+			<td style={a2}>Git_Clone</td>
+		  	<td style={a3}>Docker_Build</td>
+		  </tr>
+		    <tr bgcolor="powderblue">		  
+			<td></td>
+		    </tr>	
+		  <tr bgcolor="#728FCE">
+			<td style={a4}>Docker_Run</td>
+			<td style={a5}>Docker_Tar</td>
+			<td style={a6}>Artifactory</td>
+			<tr bgcolor="powderblue">		  
+			<td></td>
+		    </tr>	
+		  <tr bgcolor="#728FCE">	
+            <td style={a7}>Finish</td>			  
+			<td style={a8}>Sending_Mail</td>
+		    </tr>
+		  </tr>
+		  </tr>
+		  </tr>		  
+		  <tr bgcolor="powderblue">		  
+			<td><br></td>
+		  </tr>
+
+		</table>
+		</div>
+      </body>
+    </html>
