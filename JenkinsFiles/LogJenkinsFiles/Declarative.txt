@@ -1,0 +1,231 @@
+Started by user sergey
+Obtained JenkinsFiles/Declarative from git http://192.168.44.130/targil_v3_group/targil_v3.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on targil_v3 in /jenkins/workspace/targil_v3_Declarative
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: NONE
+using credential targil-v3
+Fetching changes from the remote Git repository
+ > git rev-parse --resolve-git-dir /jenkins/workspace/targil_v3_Declarative/.git # timeout=10
+ > git config remote.origin.url http://192.168.44.130/targil_v3_group/targil_v3.git # timeout=10
+Fetching upstream changes from http://192.168.44.130/targil_v3_group/targil_v3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.34.1'
+using GIT_ASKPASS to set credentials targil-v3
+ > git fetch --tags --force --progress -- http://192.168.44.130/targil_v3_group/targil_v3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+Checking out Revision da92480011f3a2cc1a12a5797f3db3a974a2d1b7 (refs/remotes/origin/develop)
+Commit message: "Update Declarative"
+ > git rev-parse refs/remotes/origin/develop^{commit} # timeout=10
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f da92480011f3a2cc1a12a5797f3db3a974a2d1b7 # timeout=10
+ > git rev-list --no-walk da92480011f3a2cc1a12a5797f3db3a974a2d1b7 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Clean_Pre_Archive)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ echo ========== The begin Clean Archive stage ==========
+========== The begin Clean Archive stage ==========
++ [ -d /jenkins/workspace/targil_v3Prj ]
++ rm -rf /jenkins/workspace/targil_v3Prj
++ echo =========== The END Clean Archive stage ===========
+=========== The END Clean Archive stage ===========
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Git_Clone)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ echo ========== The begin clonning git stage ===========
+========== The begin clonning git stage ===========
++ LOG_PATH=/jenkins/workspace/targil_v3Prj/BuildLogs
++ [ ! -d /jenkins/workspace/targil_v3Prj ]
++ mkdir -p /jenkins/workspace/targil_v3Prj
++ [ ! -d /jenkins/workspace/targil_v3Prj/BuildLogs ]
++ mkdir -p /jenkins/workspace/targil_v3Prj/BuildLogs
++ cd /jenkins/workspace/targil_v3Prj
++ git clone -b develop --single-branch http://root:system1!@192.168.44.130/targil_v3_group/targil_v3.git
+Cloning into 'targil_v3'...
++ echo finished clonning git!!!
+finished clonning git!!!
++ echo ======= The END finished clonning git stage =======
+======= The END finished clonning git stage =======
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker_Build)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ echo ========== The begin docker build stage ===========
+========== The begin docker build stage ===========
++ docker image inspect targil_v3
++ docker image rm -f targil_v3
+Untagged: targil_v3:latest
+Deleted: sha256:0ba86df6895746918481fcc60679ebe831f71be54b872e0e85041df7e6747c5e
++ cd /jenkins/workspace/targil_v3Prj/targil_v3
++ docker build -t targil_v3:latest .
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 742B 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load .dockerignore
+#2 transferring context: 2B 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.9
+#3 DONE 1.9s
+
+#4 [1/4] FROM docker.io/library/python:3.9@sha256:12f683bbf2fbd7598defa37eedb1eaa6505c310c1a3d859860a58567df8c8e66
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 1.22kB done
+#5 DONE 0.0s
+
+#6 [2/4] WORKDIR /app
+#6 CACHED
+
+#7 [3/4] RUN apt-get update &&     apt-get install -y vim zip unzip &&     rm -rf /var/lib/apt/lists/*
+#7 CACHED
+
+#8 [4/4] COPY zip_job.py /app/
+#8 CACHED
+
+#9 exporting to image
+#9 exporting layers done
+#9 writing image sha256:0ba86df6895746918481fcc60679ebe831f71be54b872e0e85041df7e6747c5e done
+#9 naming to docker.io/library/targil_v3:latest done
+#9 DONE 0.0s
++ echo ========== The End docker build stage ===========
+========== The End docker build stage ===========
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker_Run)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ echo ========== The begin docker build stage ===========
+========== The begin docker build stage ===========
++ + grep targil_v3
+docker ps -a
++ wc -l
++ [ 1 -gt 0 ]
++ docker rm --force targil_v3
+targil_v3
++ docker run --name targil_v3 targil_v3:latest
+environ({'PATH': '/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'HOSTNAME': 'ec9d071eece0', 'LANG': 'C.UTF-8', 'GPG_KEY': 'E3FF2839C048B25C084DEBE9B26995E310250568', 'PYTHON_VERSION': '3.9.17', 'PYTHON_PIP_VERSION': '23.0.1', 'PYTHON_SETUPTOOLS_VERSION': '58.1.0', 'PYTHON_GET_PIP_URL': 'https://github.com/pypa/get-pip/raw/0d8570dc44796f4369b652222cf176b3db6ac70e/public/get-pip.py', 'PYTHON_GET_PIP_SHA256': '96461deced5c2a487ddc65207ec5a9cffeca0d34e7af7ea1afc470ff0d746207', 'VERSION': '1.2.0', 'HOME': '/root'})
+environ({'PATH': '/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'HOSTNAME': 'ec9d071eece0', 'LANG': 'C.UTF-8', 'GPG_KEY': 'E3FF2839C048B25C084DEBE9B26995E310250568', 'PYTHON_VERSION': '3.9.17', 'PYTHON_PIP_VERSION': '23.0.1', 'PYTHON_SETUPTOOLS_VERSION': '58.1.0', 'PYTHON_GET_PIP_URL': 'https://github.com/pypa/get-pip/raw/0d8570dc44796f4369b652222cf176b3db6ac70e/public/get-pip.py', 'PYTHON_GET_PIP_SHA256': '96461deced5c2a487ddc65207ec5a9cffeca0d34e7af7ea1afc470ff0d746207', 'VERSION': '1.2.0', 'HOME': '/root'})
+environ({'PATH': '/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'HOSTNAME': 'ec9d071eece0', 'LANG': 'C.UTF-8', 'GPG_KEY': 'E3FF2839C048B25C084DEBE9B26995E310250568', 'PYTHON_VERSION': '3.9.17', 'PYTHON_PIP_VERSION': '23.0.1', 'PYTHON_SETUPTOOLS_VERSION': '58.1.0', 'PYTHON_GET_PIP_URL': 'https://github.com/pypa/get-pip/raw/0d8570dc44796f4369b652222cf176b3db6ac70e/public/get-pip.py', 'PYTHON_GET_PIP_SHA256': '96461deced5c2a487ddc65207ec5a9cffeca0d34e7af7ea1afc470ff0d746207', 'VERSION': '1.2.0', 'HOME': '/root'})
+environ({'PATH': '/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'HOSTNAME': 'ec9d071eece0', 'LANG': 'C.UTF-8', 'GPG_KEY': 'E3FF2839C048B25C084DEBE9B26995E310250568', 'PYTHON_VERSION': '3.9.17', 'PYTHON_PIP_VERSION': '23.0.1', 'PYTHON_SETUPTOOLS_VERSION': '58.1.0', 'PYTHON_GET_PIP_URL': 'https://github.com/pypa/get-pip/raw/0d8570dc44796f4369b652222cf176b3db6ac70e/public/get-pip.py', 'PYTHON_GET_PIP_SHA256': '96461deced5c2a487ddc65207ec5a9cffeca0d34e7af7ea1afc470ff0d746207', 'VERSION': '1.2.0', 'HOME': '/root'})
+All files and zip files were created successfully.
++ echo ========== The End docker build stage ===========
+========== The End docker build stage ===========
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker_Tar)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ echo ========== The begin docker build stage ===========
+========== The begin docker build stage ===========
++ cd /jenkins/workspace/targil_v3Prj/targil_v3
++ docker save targil_v3
++ echo ========== The End docker build stage ===========
+========== The End docker build stage ===========
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Artifactory)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ echo ========= The begin Artifactory build stage ==========
+========= The begin Artifactory build stage ==========
++ JENKINS_PATH=/jenkins/workspace/targil_v3Prj
++ cd /jenkins/workspace/targil_v3Prj
++ BUILD_SUCCESS=true
++ ARTIFACTORY_SERVER=http://192.168.44.133:8082/
++ ARTIFACTORY_USER=admin
++ ARTIFACTORY_PASSWORD=S#ystem1!
++ VERSION=1_0_0_1
++ TARFILE=/home/ubuntu/Documents/targil_v3.tar
++ ARTIFACTORY_REPO=artifactory/jfrog-repo/1_0_0_1/
++ test -f /home/ubuntu/Documents/targil_v3.tar
++ rm -f /home/ubuntu/Documents/targil_v3.tar
++ cp -R /jenkins/workspace/targil_v3Prj/targil_v3/targil_v3.tar /home/ubuntu/Documents
++ chmod 777 /home/ubuntu/Documents/targil_v3.tar
++ [ true = true ]
++ curl -uadmin:S#ystem1! -T /home/ubuntu/Documents/targil_v3.tar http://192.168.44.133:8082//artifactory/jfrog-repo/1_0_0_1/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0 1015M  100    19    0     0    870      0 --:--:-- --:--:-- --:--:--   950
+404 page not found
++ echo ========== The End Artifactory build stage ===========
+========== The End Artifactory build stage ===========
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Finish)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ echo ===================================================
+===================================================
++ echo The Finish all stages processing!!!
+The Finish all stages processing!!!
++ echo ===================================================
+===================================================
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Sending_Mail)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ echo =========== The begin Sending_Mail stage ==========
+=========== The begin Sending_Mail stage ==========
++ cd /jenkins/workspace/targil_v3Prj/targil_v3/scripts
++ echo =========== The END Sending_Mail stage ============
+=========== The END Sending_Mail stage ============
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

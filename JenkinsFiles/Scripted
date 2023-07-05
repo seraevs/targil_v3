@@ -1,0 +1,194 @@
+node('targil_v3')
+{
+	stage('Clean_Pre_Archive') {
+		script {
+          try {
+            sh '''
+			echo ========== The begin Clean Archive stage ==========
+			JENKINS_PATH=/jenkins/workspace/targil_v3Prj
+			if [ -d $JENKINS_PATH ]
+			then
+    				rm -rf "$JENKINS_PATH"
+			fi
+
+			echo =========== The END Clean Archive stage ===========	
+		'''
+		}catch (Exception e){	
+		sh '''
+		SEND_REPORT_MAIL=/jenkins/workspace/targil_v3Prj/targil_v3/scripts
+		cd "$SEND_REPORT_MAIL"			
+		python3 "$SEND_REPORT_MAIL/send_html_manager.py" "Clean_Pre_Archive"
+		'''
+		throw e
+		}
+		}
+    }
+
+
+	stage('Git_Clone') {
+		script {
+        try {		
+	    sh '''
+			echo ========== The begin clonning git stage ===========
+			JENKINS_PATH=/jenkins/workspace/targil_v3Prj
+			GIT_PATH=http://"root:system1!"@192.168.44.130/targil_v3_group/targil_v3.git
+			
+			LOG_PATH=/jenkins/workspace/targil_v3Prj/BuildLogs
+
+			if [ ! -d $JENKINS_PATH ]
+			then
+    				mkdir -p $JENKINS_PATH
+			fi
+
+			if [ ! -d $LOG_PATH ]
+			then
+    				mkdir -p $LOG_PATH
+			fi
+
+			cd "$JENKINS_PATH"
+			git clone -b develop --single-branch "$GIT_PATH"
+			echo finished clonning git!!!
+			echo ======= The END finished clonning git stage =======
+		'''
+		}catch (Exception e){	
+		sh '''
+		SEND_REPORT_MAIL=/jenkins/workspace/targil_v3Prj/targil_v3/scripts
+		cd "$SEND_REPORT_MAIL"			
+		python3 "$SEND_REPORT_MAIL/send_html_manager.py" "Clean_Pre_Archive"
+		'''
+		throw e
+		}
+		}
+    }
+
+	stage('Docker_Build') {
+		script {
+        try {		
+	    sh '''
+			echo ========== The begin docker build stage ===========
+			JENKINS_PATH=/jenkins/workspace/targil_v3Prj
+			if docker image inspect targil_v3 >/dev/null 2>&1; then
+    			docker image rm -f targil_v3
+			fi		
+    			
+			cd $JENKINS_PATH/targil_v3
+			docker build -t targil_v3:latest .
+			echo ========== The End docker build stage ===========
+
+		'''
+		}catch (Exception e){	
+		sh '''
+		SEND_REPORT_MAIL=/jenkins/workspace/targil_v3Prj/targil_v3/scripts
+		cd "$SEND_REPORT_MAIL"			
+		python3 "$SEND_REPORT_MAIL/send_html_manager.py" "Clean_Pre_Archive"
+		'''
+		throw e
+		}
+		}
+    }
+
+	stage('Docker_Run') {
+		script {
+        try {		
+	    sh '''
+			echo ========== The begin docker build stage ===========
+			JENKINS_PATH=/jenkins/workspace/targil_v3Prj
+			if [ $( docker ps -a | grep targil_v3 | wc -l ) -gt 0 ]; then
+  				docker rm --force targil_v3
+			fi			
+			docker run --name targil_v3 targil_v3:latest
+			echo ========== The End docker build stage ===========
+
+		'''
+		}catch (Exception e){	
+		sh '''
+		SEND_REPORT_MAIL=/jenkins/workspace/targil_v3Prj/targil_v3/scripts
+		cd "$SEND_REPORT_MAIL"			
+		python3 "$SEND_REPORT_MAIL/send_html_manager.py" "Clean_Pre_Archive"
+		'''
+		throw e
+		}
+		}
+    }
+
+	stage('Docker_Tar') {
+		script {
+        try {		
+	    sh '''
+			echo ========== The begin docker build stage ===========
+			JENKINS_PATH=/jenkins/workspace/targil_v3Prj
+			cd $JENKINS_PATH/targil_v3
+			docker save targil_v3 > targil_v3.tar
+			echo ========== The End docker build stage ===========
+
+		'''
+		}catch (Exception e){	
+		sh '''
+		SEND_REPORT_MAIL=/jenkins/workspace/targil_v3Prj/targil_v3/scripts
+		cd "$SEND_REPORT_MAIL"			
+		python3 "$SEND_REPORT_MAIL/send_html_manager.py" "Clean_Pre_Archive"
+		'''
+		throw e
+		}
+		}
+    }	
+
+	stage('Artifactory') {	
+		script {
+        try {			
+	    sh '''
+			echo ========= The begin Artifactory build stage ==========
+			JENKINS_PATH=/jenkins/workspace/targil_v3Prj
+			cd $JENKINS_PATH
+			BUILD_SUCCESS=true  # This should be set according to your build process
+
+			ARTIFACTORY_SERVER="http://192.168.44.133:8082/"
+			ARTIFACTORY_USER="admin"
+			ARTIFACTORY_PASSWORD="S#ystem1!"
+			VERSION="1_0_0_1"
+			TARFILE=/home/ubuntu/Documents/targil_v3.tar
+			ARTIFACTORY_REPO="artifactory/jfrog-repo/${VERSION}/"
+			if test -f "$TARFILE"; then
+    			rm -f $TARFILE
+			fi
+			cp -R $JENKINS_PATH/targil_v3/targil_v3.tar /home/ubuntu/Documents
+			chmod 777 /home/ubuntu/Documents/targil_v3.tar
+			if [ "$BUILD_SUCCESS" = true ] ; then
+			# Uploading to Artifactory
+			curl -u$ARTIFACTORY_USER:$ARTIFACTORY_PASSWORD -T $TARFILE "$ARTIFACTORY_SERVER/$ARTIFACTORY_REPO"			
+			fi
+			echo ========== The End Artifactory build stage ===========
+		'''		
+		}catch (Exception e){	
+		sh '''
+		SEND_REPORT_MAIL=/jenkins/workspace/targil_v3Prj/targil_v3/scripts
+		cd "$SEND_REPORT_MAIL"			
+		python3 "$SEND_REPORT_MAIL/send_html_manager.py" "Artifactory"
+		'''
+		throw e
+		}
+		}
+    }
+
+	stage('Finish') {		
+	    sh '''
+
+			echo ===================================================
+			echo The Finish all stages processing!!!
+			echo ===================================================
+		'''		
+	}
+
+	stage('Sending_Mail') {
+	    sh '''
+
+			echo =========== The begin Sending_Mail stage ==========
+			JENKINS_PATH=/jenkins/workspace/targil_v3Prj
+			SEND_REPORT_MAIL=/jenkins/workspace/targil_v3Prj/targil_v3/scripts
+			cd "$SEND_REPORT_MAIL"
+			#python3 $SEND_REPORT_MAIL/send_html_manager.py "FINISH"
+			echo =========== The END Sending_Mail stage ============	
+		'''		
+	
+	}	
+}
