@@ -22,7 +22,7 @@ Jenkins with Docker, and JFrog server, respectively.
 
 ## Create Dockerfile for Docker image build as follows:
 
-The path to Dockerfile: https://github.com/seraevs/targil_v3/Dockerfile
+The path to Dockerfile: https://github.com/seraevs/targil_v3/tree/main/Dockerfile
 
     a. Based on python:3.9 image
     b. Define environment variable VERSION=1.2.0
@@ -43,11 +43,11 @@ The path to Dockerfile: https://github.com/seraevs/targil_v3/Dockerfile
 Please note that the corrected version assumes that you have created the Dockerfile and zip_job.py script at the specified locations.
 
 
-## vCreated 2 Jenkinsfile pipeline jobs with the same logic, one Declarative and one Scripted:
+## Created 2 Jenkinsfile pipeline jobs with the same logic, one Declarative and one Scripted:
     a. The agent should be based on the Dockerfile you created in step 1.
     i. It should run in privileged mode with the label "zip-job-docker".
     b. The build stage should execute the zip_job.py you created in step 2.
-    c. The publish stage should upload all the zip files created (only if the build stage succeeded) to the Artifactory you installed using the following properties:
+    c. The publishing stage should upload all the zip files created (only if the build stage succeeded) to the Artifactory you installed using the following properties:
     i. Artifactory server: "http://192.168.44.133:8082/ui/native/jfrog-support-bundle/"
     ii. Artifactory user: "admin"
     iii. Artifactory password: "S#ystem1!"
@@ -59,13 +59,12 @@ Please note that the corrected version assumes you have configured the Jenkins f
 
 
 ## Links to pictures: 
-https://github.com/seraevs/targil_v3/Pictures
-
+https://github.com/seraevs/targil_v3/tree/main/Pictures
 
 ## Links to JenkinsFoles: 
-https://github.com/seraevs/targil_v3/JenkinsFiles
+https://github.com/seraevs/targil_v3/tree/main/JenkinsFiles
 
 ## Links to Logs JenkinsFoles: 
-https://github.com/seraevs/targil_v3/JenkinsFiles/LogJenkinsFiles
+https://github.com/seraevs/targil_v3/tree/main/LogJenkinsFiles
 
 
