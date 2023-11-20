@@ -22,7 +22,7 @@ Jenkins with Docker, and JFrog server, respectively.
 
 ## Create Dockerfile for Docker image build as follows:
 
-The path to Dockerfile: [https://github.com/seraevs/targil_v3/tree/main/Dockerfile](https://github.com/seraevs/targil_v3/blob/main/Dockerfile)
+The path to Dockerfile: https://github.com/seraevs/targil_v3/blob/main/Dockerfile
 
     a. Based on python:3.9 image
     b. Define environment variable VERSION=1.2.0
@@ -35,7 +35,7 @@ The path to Dockerfile: [https://github.com/seraevs/targil_v3/tree/main/Dockerfi
 
 ## Create zip_job.py python script as follows:
 
-The path to zip_job.py: [https://github.com/seraevs/targil_v3/zip_job.py](https://github.com/seraevs/targil_v3/blob/main/zip_job.py)
+The path to zip_job.py: https://github.com/seraevs/targil_v3/blob/main/zip_job.py
 
     a. Create an array of a, b, c, d
     b. Based on this array, create text files (a.txt, b.txt, etc.)
@@ -48,8 +48,8 @@ Please note that the corrected version assumes that you have created the Dockerf
 
 ## Created 2 Jenkinsfile pipeline jobs with the same logic, one Declarative and one Scripted:
 
-The path to Jenkins files Declarative: [https://github.com/seraevs/targil_v3/zip_job.py](https://github.com/seraevs/targil_v3/blob/main/JenkinsFiles/Declarative](https://github.com/seraevs/targil_v3/blob/main/JenkinsFiles/Declarative)
-The path to Jenkins files Scripted: [https://github.com/seraevs/targil_v3/zip_job.py](https://github.com/seraevs/targil_v3/blob/main/JenkinsFiles/Declarative](https://github.com/seraevs/targil_v3/blob/main/JenkinsFiles/Scripted)
+The path to Jenkins files Declarative: https://github.com/seraevs/targil_v3/blob/main/JenkinsFiles/Declarative
+The path to Jenkins files Scripted: https://github.com/seraevs/targil_v3/blob/main/JenkinsFiles/Scripted
 
     a. The agent should be based on the Dockerfile you created in step 1.
     i. It should run in privileged mode with the label "zip-job-docker".
