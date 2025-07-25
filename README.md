@@ -1,4 +1,4 @@
-# DevOps Continuous Delivery Pipeline Exercise
+# DevOps Continuous Delivery Pipeline
 
 # targil_v3
 
